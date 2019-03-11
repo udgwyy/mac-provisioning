@@ -1,0 +1,78 @@
+- hosts: localhost
+  gather_facts: no
+  become: no
+
+  tasks:
+
+    - name: キーリピート検知待ち時間を設定
+      osx_defaults: domain=NSGlobalDomain key=InitialKeyRepeat type=int value=10
+    - name: キーリピート間隔時間を設定
+      osx_defaults: domain=NSGlobalDomain key=KeyRepeat type=int value=1
+
+    - name: トラックパッドタップの有効化
+      osx_defaults: domain=com.apple.AppleMultitouchTrackpad  key=Clicking type=int value=1
+    - name: トラックパッド右クリックの有効化
+      osx_defaults: domain=com.apple.AppleMultitouchTrackpad key=TrackpadCornerSecondaryClick type=int value=2
+    - name: ライブ変換の無効化
+      osx_defaults: domain=com.apple.inputmethod.Kotoeri key=JIMPrefLiveConversionKey type=int value=0
+
+    - name: ネットワークディスクで、.DS_Storeファイルを作らない
+      osx_defaults: domain=com.apple.desktopservices key=DSDontWriteNetworkStores type=bool value=true
+    - name: バッテリーのパーセントを表示
+      osx_defaults: domain=com.apple.menuextra.battery key=ShowPercent type=string value='YES'
+    - name: 日付表示を設定
+      osx_defaults: domain=com.apple.menuextra.clock key='DateFormat' type=string value='M月d日(EEE)'
+    - name: 未確認のアプリケーションを実行する際のダイアログを無効にする
+      osx_defaults: domain=com.apple.LaunchServices key=LSQuarantine type=bool value=false
+    - name: スクリーンショット保存形式をPNGにする
+      osx_defaults: domain=com.apple.screencapture key= type=string value='png'
+    - name: スリープまたはスクリーンセーバから復帰した際、パスワードをすぐに要求
+      osx_defaults: domain=com.apple.screensaver key=askForPasswordDelay type=int value=0
+
+    - name: マウントされたディスクがあったら、自動的に新しいウィンドウを開く
+      osx_defaults: domain=com.apple.frameworks.diskimages key=auto-open-ro-root type=bool value=true
+    - name: マウントされたディスクがあったら、自動的に新しいウィンドウを開く
+      osx_defaults: domain=com.apple.frameworks.diskimages key=auto-open-rw-root type=bool value=true
+    - name: マウントされたディスクがあったら、自動的に新しいウィンドウを開く
+      osx_defaults: domain=com.apple.finder key=OpenWindowForNewRemovableDisk type=bool value=true
+    - name: 新しいウィンドウでデフォルトでホームフォルダを開く
+      osx_defaults: domain=com.apple.finder key=NewWindowTarget type=string value="PfDe"
+    - name: 新しいウィンドウでデフォルトでホームフォルダを開く
+      osx_defaults: domain=com.apple.finder key=NewWindowTargetPath type=string value="file://${HOME}/"
+
+    - name: ステータスバーを表示
+      osx_defaults: domain=com.apple.finder key=ShowStatusBar type=bool value=true
+    - name: パスバーを表示
+      osx_defaults: domain=com.apple.finder key=ShowPathbar type=bool value=true
+    - name: タブバーを表示
+      osx_defaults: domain=com.apple.finder key=ShowTabView type=bool value=true
+    - name: 不可視ファイルを表示
+      osx_defaults: domain=com.apple.finder key=AppleShowAllFiles type=string value='YES'
+    - name: 拡張子を表示
+      osx_defaults: domain=NSGlobalDomain key=AppleShowAllExtensions type=bool value=true
+
+    - name: Dockのアイコンサイズを変更する
+      osx_defaults: domain=com.apple.dock key=tilesize type=int value=40
+    - name: Dockの位置を左側に変更する
+      osx_defaults: domain=com.apple.dock key=orientation type=string value="left"
+    - name: Dock を自動的に隠す
+      osx_defaults: domain=com.apple.dock key=autohide type=bool value=false
+    - name: Dock の拡大機能を入にする
+      osx_defaults: domain=com.apple.dock key=magnification type=bool value=false
+
+    - name: マウス左下 スクリーンセーバー
+      osx_defaults: domain=com.apple.dock key=wvous-bl-corner type=int value=5
+    - name: マウス左下 スクリーンセーバー
+      osx_defaults: domain=com.apple.dock key=wvous-bl-modifier type=int value=0
+    - name: マウス右下 デスクトップ
+      osx_defaults: domain=com.apple.dock key=wvous-br-corner type=int value=3
+    - name: マウス右下 デスクトップ
+      osx_defaults: domain=com.apple.dock key=wvous-br-modifier type=int value=0
+
+  handlers:
+    - name: Display LibraryDir
+      shell: 'chflags nohidden ~/Library'
+    - name: Restart Dock
+      shell: 'killall Dock'
+    - name: Restart Finder
+      shell: 'killall Finder'

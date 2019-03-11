@@ -1,0 +1,61 @@
+- hosts: localhost
+  connection: local
+  vars:
+    homebrew_packages:
+      - name: readline
+      - name: openssl
+      - { name: openssl, state: linked, install_options: force }
+      - name: ansible
+      - name: git
+      - name: git-flow
+      - name: python
+      - name: node
+      - name: peco
+      - name: mas
+      - name: vim
+      - name: zsh
+      - name: zsh-completions
+      - name: zsh-syntax-highlighting
+
+    homebrew_cask_packages:
+      - name: google-japanese-ime
+      - name: iterm2
+      - name: cool-retro-term
+      - name: alfred
+      - name: 1password
+      - name: google-chrome
+      - name: firefox
+      - name: slack
+      - name: github
+      - name: atom
+      - name: kobito
+      - name: visual-studio-code
+      - name: google-backup-and-sync
+      - name: dropbox
+      - name: skitch
+      - name: sketch
+      - name: adobe-acrobat-reader
+      - name: kindle
+      - name: appcleaner
+      - name: the-unarchiver
+      - name: onyx
+      - name: cheatsheet
+      - name: copyclip
+      - name: clipy
+      - name: hyperswitch
+      - name: musescore
+
+  tasks:
+    - name: homebrew update
+      homebrew:
+        update_homebrew: yes
+    - name: homebrew packages install
+      homebrew:
+        name: '{{ item.name }}'
+        state: '{{ item.state | default("present") }}'
+      with_items: '{{ homebrew_packages }}'
+    - name: homebrew cask packages install
+      homebrew_cask: name={{ item.name }} state=installed
+      environment:
+        HOMEBREW_CASK_OPTS: "--appdir=/Applications"
+      with_items: '{{ homebrew_cask_packages }}'      
