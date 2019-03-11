@@ -1,5 +1,5 @@
 # provision
-chmod +x mac-provisioning.sh
+chmod +x mac-provisioning.sh  
 mac-provisioning.sh
 
 # set zsh,oh-my-zsh
